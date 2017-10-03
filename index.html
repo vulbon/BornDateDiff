@@ -5,26 +5,51 @@
 </head>
 
 <body>
-    <h2 id="days" />
-    <h2 id="months" />
-    <h2 id="years" />
-    <h1 id="tag" />
+    <h1 id="tag"></h1>
+    <input type="date" id="input_date" value="2016-03-17">
 </body>
 <script src="moment.min.js"></script>
 <script>
-    var days = document.getElementById("days");
-    var months = document.getElementById("months");
-    var years = document.getElementById("years");
+    // var days = document.getElementById("days");
+    // var months = document.getElementById("months");
+    // var years = document.getElementById("years");
     var tag = document.getElementById("tag");
+    var input_date = document.getElementById("input_date").value;
 
-    var nowDate = moment();
+    var yearNumber, monthNumber, dayNumber;
     var pearBornDate = moment("2016-03-17 00:00:00");
 
-    var a = moment.set()
+    // days.innerText = moment().diff(pearBornDate, 'days');
+    // months.innerText = nowDate.diff(pearBornDate, 'months');
+    // years.innerText = nowDate.diff(pearBornDate, 'years');
 
-    days.innerText = nowDate.diff(pearBornDate, 'days');
-    months.innerText = nowDate.diff(pearBornDate, 'months');
-    years.innerText = nowDate.diff(pearBornDate, 'years');
+    getTag();
+    input_date.onchange = getTag;
+
+    function getTag() {
+        var nowDate = moment(input_date + " 00:00:00");
+
+        if (parseFloat(nowDate.format("D")) >= parseFloat(pearBornDate.format("D"))) {
+            dayNumber = parseFloat(nowDate.format("D")) - parseFloat(pearBornDate.format("D"));
+        } else {
+            dayNumber = parseFloat(nowDate.format("D")) - parseFloat(pearBornDate.format("D")) + nowDate.add(-1,
+                'month').daysInMonth();
+        }
+
+        if (nowDate.month() >= pearBornDate.month()) {
+            monthNumber = nowDate.month() - pearBornDate.month();
+        } else {
+            monthNumber = nowDate.month() - pearBornDate.month() + 12;
+        }
+
+        if (nowDate.dayOfYear() > pearBornDate.dayOfYear()) {
+            yearNumber = nowDate.year() - pearBornDate.year();
+        } else {
+            yearNumber = nowDate.year() - pearBornDate.year() - 1;
+        }
+
+        tag.innerText = "#" + String(yearNumber) + "y" + String(monthNumber) + "m" + String(dayNumber) + "d";
+    }
 
     // if date > 3/17
     //     compare to this year's march
