@@ -1,3 +1,4 @@
+<!Doctype html>
 <html>
 
 <head>
@@ -5,36 +6,61 @@
 </head>
 
 <body>
-    <h2 id="days" />
-    <h2 id="months" />
-    <h2 id="years" />
-    <h1 id="tag" />
+    <h1 id="tag"></h1>
+    <input type="date" id="input_datePearBirth" />
+    <input type="date" id="input_dateNow" />
 </body>
 <script src="moment.min.js"></script>
 <script>
-    var days = document.getElementById("days");
-    var months = document.getElementById("months");
-    var years = document.getElementById("years");
-    var tag = document.getElementById("tag");
+    let tag = document.getElementById("tag");
+    let input_datePearBirth = document.getElementById("input_datePearBirth");
+    let input_dateNow = document.getElementById("input_dateNow");
+
+    const pearBornDateString ="2016-03-17 00:00:00"; 
 
     var nowDate = moment();
-    var pearBornDate = moment("2016-03-17 00:00:00");
+    var pearBornDate = moment(pearBornDate);
 
-    var a = moment.set()
+    input_datePearBirth.value = pearBornDate.format("YYYY-MM-DD");
+    input_dateNow.value = nowDate.format("YYYY-MM-DD");
 
-    days.innerText = nowDate.diff(pearBornDate, 'days');
-    months.innerText = nowDate.diff(pearBornDate, 'months');
-    years.innerText = nowDate.diff(pearBornDate, 'years');
+    var diffDayNum, diffMonthNum, diffYearNum;
 
-    // if date > 3/17
-    //     compare to this year's march
-    // else
-    //     compare to previous yesr's march
+    calculate();
 
-    //     if day > 17
-    //         compare to this month 17th
-    //     else
-    //         compare to previous month 17th
+    input_datePearBirth.onchange = function () {
+        calculate();
+    }
+
+    input_dateNow.onchange = function () {
+        calculate();
+    }
+
+    function calculate() {
+
+        
+
+        if (parseInt(nowDate.format("D")) >= parseInt(pearBornDate.format("D"))) {
+            diffDayNum = parseInt(nowDate.format("D")) - parseInt(pearBornDate.format("D"));
+        } else {
+            diffDayNum = parseInt(nowDate.format("D")) - parseInt(pearBornDate.format("D")) + nowDate.add(-1, "month").daysInMonth();
+        }
+
+        if (nowDate.month() >= pearBornDate.month()) {
+            diffMonthNum = nowDate.month() - pearBornDate.month();
+        } else {
+            diffMonthNum = nowDate.month() - pearBornDate.month() + 12;
+        }
+
+        if (nowDate.dayOfYear() >= pearBornDate.dayOfYear()) {
+            diffYearNum = nowDate.year() - pearBornDate.year();
+        } else {
+            diffYearNum = nowDate.year() - pearBornDate.year() - 1;
+        }
+
+        tag.innerText = "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
+    }
+
 </script>
 
 </html>
