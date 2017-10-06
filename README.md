@@ -1,4 +1,4 @@
 # PearBornDateDiff
 Compare between Now and Pear's Birthday
 
-[demo]: https://vulbon.github.io/PearBornDateDiff/
+[demo] https://vulbon.github.io/PearBornDateDiff/
