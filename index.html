@@ -1,65 +1,89 @@
+<!Doctype html>
 <html>
 
 <head>
     <meta charset="utf-8">
+    <style>
+        .datePicker {
+            margin-top: 20px;
+            width: 140px;
+            border: 1px solid #000000;
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+        }
+        
+        .button {
+            border: 1px solid #000000;
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+        }
+    </style>
 </head>
 
 <body>
     <h1 id="tag"></h1>
-    <input type="date" id="input_date" value="2016-03-17">
+    <br>
+    <input type="date" id="input_datePearBirth" class="datePicker" /> <button class="button" id="btn_restoreToPearBirth">restore to pear's birthday</button>
+    <br>
+    <input type="date" id="input_dateNow" class="datePicker" /> <button class="button" id="btn_restoreToNow">restore to date now</button>
 </body>
 <script src="moment.min.js"></script>
 <script>
-    // var days = document.getElementById("days");
-    // var months = document.getElementById("months");
-    // var years = document.getElementById("years");
-    var tag = document.getElementById("tag");
-    var input_date = document.getElementById("input_date").value;
+    let tag = document.getElementById("tag");
+    let input_datePearBirth = document.getElementById("input_datePearBirth");
+    let input_dateNow = document.getElementById("input_dateNow");
+    let btn_restoreToPearBirth = document.getElementById("btn_restoreToPearBirth");
+    let btn_restoreToNow = document.getElementById("btn_restoreToNow");
 
-    var yearNumber, monthNumber, dayNumber;
-    var pearBornDate = moment("2016-03-17 00:00:00");
+    const pearBornDateString = "2016-03-17";
 
-    // days.innerText = moment().diff(pearBornDate, 'days');
-    // months.innerText = nowDate.diff(pearBornDate, 'months');
-    // years.innerText = nowDate.diff(pearBornDate, 'years');
+    const nowDate = moment();
+    const pearBornDate = moment(pearBornDateString);
 
-    getTag();
-    input_date.onchange = getTag;
+    input_datePearBirth.value = pearBornDate.format("YYYY-MM-DD");
+    input_dateNow.value = nowDate.format("YYYY-MM-DD");
 
-    function getTag() {
-        var nowDate = moment(input_date + " 00:00:00");
+    let diffDayNum, diffMonthNum, diffYearNum;
 
-        if (parseFloat(nowDate.format("D")) >= parseFloat(pearBornDate.format("D"))) {
-            dayNumber = parseFloat(nowDate.format("D")) - parseFloat(pearBornDate.format("D"));
-        } else {
-            dayNumber = parseFloat(nowDate.format("D")) - parseFloat(pearBornDate.format("D")) + nowDate.add(-1,
-                'month').daysInMonth();
-        }
+    input_datePearBirth.onchange = calculate;
+    input_dateNow.onchange = calculate;
 
-        if (nowDate.month() >= pearBornDate.month()) {
-            monthNumber = nowDate.month() - pearBornDate.month();
-        } else {
-            monthNumber = nowDate.month() - pearBornDate.month() + 12;
-        }
+    calculate();
 
-        if (nowDate.dayOfYear() > pearBornDate.dayOfYear()) {
-            yearNumber = nowDate.year() - pearBornDate.year();
-        } else {
-            yearNumber = nowDate.year() - pearBornDate.year() - 1;
-        }
-
-        tag.innerText = "#" + String(yearNumber) + "y" + String(monthNumber) + "m" + String(dayNumber) + "d";
+    btn_restoreToPearBirth.onclick = function() {
+        input_datePearBirth.value = pearBornDate.format("YYYY-MM-DD");
+        calculate();
     }
 
-    // if date > 3/17
-    //     compare to this year's march
-    // else
-    //     compare to previous yesr's march
+    btn_restoreToNow.onclick = function() {
+        input_dateNow.value = nowDate.format("YYYY-MM-DD");
+        calculate();
+    }
 
-    //     if day > 17
-    //         compare to this month 17th
-    //     else
-    //         compare to previous month 17th
+    function calculate() {
+        tmp_nowDate = moment(input_dateNow.value);
+        tmp_pastDate = moment(input_datePearBirth.value);
+
+        if (parseInt(tmp_nowDate.format("D")) >= parseInt(tmp_pastDate.format("D"))) {
+            diffDayNum = parseInt(tmp_nowDate.format("D")) - parseInt(tmp_pastDate.format("D"));
+        } else {
+            diffDayNum = parseInt(tmp_nowDate.format("D")) - parseInt(tmp_pastDate.format("D")) + tmp_nowDate.add(-1,
+                "month").daysInMonth();
+        }
+        if (tmp_nowDate.month() >= tmp_pastDate.month()) {
+            diffMonthNum = tmp_nowDate.month() - tmp_pastDate.month();
+        } else {
+            diffMonthNum = tmp_nowDate.month() - tmp_pastDate.month() + 12;
+        }
+        if (tmp_nowDate.dayOfYear() >= tmp_pastDate.dayOfYear()) {
+            diffYearNum = tmp_nowDate.year() - tmp_pastDate.year();
+        } else {
+            diffYearNum = tmp_nowDate.year() - tmp_pastDate.year() - 1;
+        }
+        tag.innerText = "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
+    }
 </script>
 
 </html>
