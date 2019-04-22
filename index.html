@@ -151,13 +151,22 @@
     }
 
     input_dateNow.onchange = function () {
+        if (!this.value){
+            this.value = nowDate.format(dateFormat);
+        }
         tag_pearBirth.innerText = calculate(moment(this.value), moment(input_datePearBirth.value));
         tag_strawBirth.innerText = calculate(moment(this.value), moment(input_dateStrawBirth.value));
     }
     input_datePearBirth.onchange = function () {
+        if (!this.value){
+            this.value = pearBornDate.format(dateFormat);
+        }
         tag_pearBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
     }
     input_dateStrawBirth.onchange = function () {
+        if (!this.value){
+            this.value = strawBornDate.format(dateFormat);
+        }
         tag_strawBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
     }
 
