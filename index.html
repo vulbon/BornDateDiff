@@ -14,27 +14,34 @@
             width: 140px;
             border: 1px solid #000000;
             border-radius: 3px;
-            height:30px;
+            height: 30px;
         }
 
         .button {
             border: 1px solid #000000;
             border-radius: 3px;
-            height:30px;
+            height: 30px;
+        }
+
+        .inline {
+            display: inline;
         }
     </style>
 </head>
 
 <body>
-    <h1 id="tag_pearBirth"></h1>
-    <h1 id="tag_strawBirth"></h1>
-    <br>
     <input type="date" id="input_dateNow" class="datePicker" />
     <button type="button" class="button" id="btn_restoreToNow">restore to date now</button>
-    <br>
+    <br />
+    <h1 id="tag_pearBirth" class="inline"></h1>
+    <button type="button" class="button" id="btn_copyPearHashtag">Copy</button>
+    <br />
+    <h1 id="tag_strawBirth" class="inline"></h1>
+    <button type="button" class="button" id="btn_copyStrawHashtag">Copy</button>
+    <br />
     <input type="date" id="input_datePearBirth" class="datePicker" />
     <button type="button" class="button" id="btn_restoreToPearBirth">restore to pear's birthday</button>
-    <br>
+    <br />
     <input type="date" id="input_dateStrawBirth" class="datePicker" />
     <button type="button" class="button" id="btn_restoreToStrawBirth">restore to Strawberry's birthday</button>
 </body>
@@ -44,7 +51,11 @@
     let btn_restoreToNow = document.getElementById("btn_restoreToNow");
 
     let tag_pearBirth = document.getElementById("tag_pearBirth");
+    let btn_copyPearHashtag = document.getElementById("btn_copyPearHashtag");
     let tag_strawBirth = document.getElementById("tag_strawBirth");
+    let btn_copyStrawHashtag = document.getElementById("btn_copyStrawHashtag");
+
+
     let input_datePearBirth = document.getElementById("input_datePearBirth");
     let btn_restoreToPearBirth = document.getElementById("btn_restoreToPearBirth");
     let input_dateStrawBirth = document.getElementById("input_dateStrawBirth");
@@ -65,18 +76,29 @@
     tag_pearBirth.innerText = calculate(nowDate, pearBornDate);
     tag_strawBirth.innerText = calculate(nowDate, strawBornDate);
 
-    input_dateNow.onchange = function(){
+    btn_copyPearHashtag.onclick = function () {
+        // tag_pearBirth.select();
+        // document.execCommand("copy");
+        copyText(tag_pearBirth.innerText);
+    }
+    btn_copyStrawHashtag.onclick = function () {
+        // tag_strawBirth.select();
+        // document.execCommand("copy");
+        copyText(tag_strawBirth.innerText);
+    }
+
+    input_dateNow.onchange = function () {
         tag_pearBirth.innerText = calculate(moment(this.value), moment(input_datePearBirth.value));
         tag_strawBirth.innerText = calculate(moment(this.value), moment(input_dateStrawBirth.value));
     }
-    input_datePearBirth.onchange = function(){
+    input_datePearBirth.onchange = function () {
         tag_pearBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
     }
-    input_dateStrawBirth.onchange = function(){
+    input_dateStrawBirth.onchange = function () {
         tag_strawBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
     }
 
-
+    
     btn_restoreToNow.onclick = function () {
         input_dateNow.value = nowDate.format(dateFormat);
         tag_pearBirth.innerText = calculate(nowDate, pearBornDate);
@@ -111,6 +133,15 @@
         }
         //tag.innerText = "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
         return "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
+    }
+
+    function copyText(copyText) {
+        var temp = document.createElement("textarea");
+        document.body.appendChild(temp);
+        temp.value = copyText;
+        temp.select();            
+        document.execCommand("copy");
+        document.body.removeChild(temp);
     }
 </script>
 
