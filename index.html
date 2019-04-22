@@ -5,88 +5,112 @@
     <title>Pear's hashtag generator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAaWJ6AAhATQBP4MAASxDgAHBB6AArvZ0AGpZ7AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB3d3d3dwAAB3ZmZmZmcAB3ZmZmZmZnAHdEMzMzNEcAd0ADAAMARwd3YAMDAwBnAAd2MzMzNnAAAHdjMzNnAAAAd2MzM2cAAAAHdmZmcAAABRd2IiZwAABVUXdydwAAAFFRAAIAAAAAAAAAAiIAAAAAAAAAIgAAD//wAA8AcAAOADAADAAQAAwAEAAMABAADAAQAA4AMAAPAHAADwBwAA+A8AANgPAACMHwAAr38AAP9/AAD/nwAA"
+    <link
+        href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAaWJ6AAhATQBP4MAASxDgAHBB6AArvZ0AGpZ7AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB3d3d3dwAAB3ZmZmZmcAB3ZmZmZmZnAHdEMzMzNEcAd0ADAAMARwd3YAMDAwBnAAd2MzMzNnAAAHdjMzNnAAAAd2MzM2cAAAAHdmZmcAAABRd2IiZwAABVUXdydwAAAFFRAAIAAAAAAAAAAiIAAAAAAAAAIgAAD//wAA8AcAAOADAADAAQAAwAEAAMABAADAAQAA4AMAAPAHAADwBwAA+A8AANgPAACMHwAAr38AAP9/AAD/nwAA"
         rel="icon" type="image/x-icon" />
     <style>
         .datePicker {
-            margin-top: 20px;
+            margin-top: 15px;
             width: 140px;
             border: 1px solid #000000;
             border-radius: 3px;
-            -moz-border-radius: 3px;
-            -webkit-border-radius: 3px;
+            height:30px;
         }
-        
+
         .button {
             border: 1px solid #000000;
             border-radius: 3px;
-            -moz-border-radius: 3px;
-            -webkit-border-radius: 3px;
+            height:30px;
         }
     </style>
 </head>
 
 <body>
-    <h1 id="tag"></h1>
+    <h1 id="tag_pearBirth"></h1>
+    <h1 id="tag_strawBirth"></h1>
     <br>
-    <input type="date" id="input_datePearBirth" class="datePicker" /> <button class="button" id="btn_restoreToPearBirth">restore to pear's birthday</button>
+    <input type="date" id="input_dateNow" class="datePicker" />
+    <button type="button" class="button" id="btn_restoreToNow">restore to date now</button>
     <br>
-    <input type="date" id="input_dateNow" class="datePicker" /> <button class="button" id="btn_restoreToNow">restore to date now</button>
+    <input type="date" id="input_datePearBirth" class="datePicker" />
+    <button type="button" class="button" id="btn_restoreToPearBirth">restore to pear's birthday</button>
+    <br>
+    <input type="date" id="input_dateStrawBirth" class="datePicker" />
+    <button type="button" class="button" id="btn_restoreToStrawBirth">restore to Strawberry's birthday</button>
 </body>
 <script src="moment.min.js"></script>
 <script>
-    let tag = document.getElementById("tag");
-    let input_datePearBirth = document.getElementById("input_datePearBirth");
     let input_dateNow = document.getElementById("input_dateNow");
-    let btn_restoreToPearBirth = document.getElementById("btn_restoreToPearBirth");
     let btn_restoreToNow = document.getElementById("btn_restoreToNow");
 
-    const pearBornDateString = "2016-03-17";
+    let tag_pearBirth = document.getElementById("tag_pearBirth");
+    let tag_strawBirth = document.getElementById("tag_strawBirth");
+    let input_datePearBirth = document.getElementById("input_datePearBirth");
+    let btn_restoreToPearBirth = document.getElementById("btn_restoreToPearBirth");
+    let input_dateStrawBirth = document.getElementById("input_dateStrawBirth");
+    let btn_restoreToStrawBirth = document.getElementById("btn_restoreToStrawBirth");
+
+    const dateFormat = "YYYY-MM-DD";
 
     const nowDate = moment();
-    const pearBornDate = moment(pearBornDateString);
+    const pearBornDate = moment("2016-03-17");
+    const strawBornDate = moment("2019-03-16");
 
-    input_datePearBirth.value = pearBornDate.format("YYYY-MM-DD");
-    input_dateNow.value = nowDate.format("YYYY-MM-DD");
+    input_dateNow.value = nowDate.format(dateFormat);
+    input_datePearBirth.value = pearBornDate.format(dateFormat);
+    input_dateStrawBirth.value = strawBornDate.format(dateFormat);
 
     let diffDayNum, diffMonthNum, diffYearNum;
 
-    input_datePearBirth.onchange = calculate;
-    input_dateNow.onchange = calculate;
+    tag_pearBirth.innerText = calculate(nowDate, pearBornDate);
+    tag_strawBirth.innerText = calculate(nowDate, strawBornDate);
 
-    calculate();
-
-    btn_restoreToPearBirth.onclick = function() {
-        input_datePearBirth.value = pearBornDate.format("YYYY-MM-DD");
-        calculate();
+    input_dateNow.onchange = function(){
+        tag_pearBirth.innerText = calculate(moment(this.value), moment(input_datePearBirth.value));
+        tag_strawBirth.innerText = calculate(moment(this.value), moment(input_dateStrawBirth.value));
+    }
+    input_datePearBirth.onchange = function(){
+        tag_pearBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
+    }
+    input_dateStrawBirth.onchange = function(){
+        tag_strawBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
     }
 
-    btn_restoreToNow.onclick = function() {
-        input_dateNow.value = nowDate.format("YYYY-MM-DD");
-        calculate();
+
+    btn_restoreToNow.onclick = function () {
+        input_dateNow.value = nowDate.format(dateFormat);
+        tag_pearBirth.innerText = calculate(nowDate, pearBornDate);
+        tag_strawBirth.innerText = calculate(nowDate, strawBornDate);
+    }
+    btn_restoreToPearBirth.onclick = function () {
+        input_datePearBirth.value = pearBornDate.format(dateFormat);
+        tag_pearBirth.innerText = calculate(nowDate, pearBornDate);
+    }
+    btn_restoreToStrawBirth.onclick = function () {
+        input_dateStrawBirth.value = strawBornDate.format(dateFormat);
+        tag_strawBirth.innerText = calculate(nowDate, strawBornDate);
     }
 
-    function calculate() {
-        tmp_nowDate = moment(input_dateNow.value);
-        tmp_pastDate = moment(input_datePearBirth.value);
 
-        if (parseInt(tmp_nowDate.format("D")) >= parseInt(tmp_pastDate.format("D"))) {
-            diffDayNum = parseInt(tmp_nowDate.format("D")) - parseInt(tmp_pastDate.format("D"));
+    function calculate(nowDate, targetDate) {
+        if (parseInt(nowDate.format("D")) >= parseInt(targetDate.format("D"))) {
+            diffDayNum = parseInt(nowDate.format("D")) - parseInt(targetDate.format("D"));
         } else {
-            diffDayNum = parseInt(tmp_nowDate.format("D")) - parseInt(tmp_pastDate.format("D")) + tmp_nowDate.add(-1,
+            diffDayNum = parseInt(nowDate.format("D")) - parseInt(targetDate.format("D")) + nowDate.add(-1,
                 "month").daysInMonth();
         }
-        if (tmp_nowDate.month() >= tmp_pastDate.month()) {
-            diffMonthNum = tmp_nowDate.month() - tmp_pastDate.month();
+        if (nowDate.month() >= targetDate.month()) {
+            diffMonthNum = nowDate.month() - targetDate.month();
         } else {
-            diffMonthNum = tmp_nowDate.month() - tmp_pastDate.month() + 12;
+            diffMonthNum = nowDate.month() - targetDate.month() + 12;
         }
-        if (tmp_nowDate.dayOfYear() >= tmp_pastDate.dayOfYear()) {
-            diffYearNum = tmp_nowDate.year() - tmp_pastDate.year();
+        if (nowDate.dayOfYear() >= targetDate.dayOfYear()) {
+            diffYearNum = nowDate.year() - targetDate.year();
         } else {
-            diffYearNum = tmp_nowDate.year() - tmp_pastDate.year() - 1;
+            diffYearNum = nowDate.year() - targetDate.year() - 1;
         }
-        tag.innerText = "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
+        //tag.innerText = "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
+        return "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
     }
 </script>
 
