@@ -9,8 +9,8 @@
         href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAaWJ6AAhATQBP4MAASxDgAHBB6AArvZ0AGpZ7AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB3d3d3dwAAB3ZmZmZmcAB3ZmZmZmZnAHdEMzMzNEcAd0ADAAMARwd3YAMDAwBnAAd2MzMzNnAAAHdjMzNnAAAAd2MzM2cAAAAHdmZmcAAABRd2IiZwAABVUXdydwAAAFFRAAIAAAAAAAAAAiIAAAAAAAAAIgAAD//wAA8AcAAOADAADAAQAAwAEAAMABAADAAQAA4AMAAPAHAADwBwAA+A8AANgPAACMHwAAr38AAP9/AAD/nwAA"
         rel="icon" type="image/x-icon" />
     <style>
-        div.center{
-            width:300px;
+        div.center {
+            width: 300px;
             margin: 0 auto;
         }
 
@@ -20,9 +20,10 @@
             font-weight: bold;
         }
 
-        .alignRight{
-            float:right;
+        .alignRight {
+            float: right;
         }
+
         .datePicker {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -134,8 +135,6 @@
     input_datePearBirth.value = pearBornDate.format(dateFormat);
     input_dateStrawBirth.value = strawBornDate.format(dateFormat);
 
-    let diffDayNum, diffMonthNum, diffYearNum;
-
     tag_pearBirth.innerText = calculate(nowDate, pearBornDate);
     tag_strawBirth.innerText = calculate(nowDate, strawBornDate);
 
@@ -151,20 +150,20 @@
     }
 
     input_dateNow.onchange = function () {
-        if (!this.value){
+        if (!this.value) {
             this.value = nowDate.format(dateFormat);
         }
         tag_pearBirth.innerText = calculate(moment(this.value), moment(input_datePearBirth.value));
         tag_strawBirth.innerText = calculate(moment(this.value), moment(input_dateStrawBirth.value));
     }
     input_datePearBirth.onchange = function () {
-        if (!this.value){
+        if (!this.value) {
             this.value = pearBornDate.format(dateFormat);
         }
         tag_pearBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
     }
     input_dateStrawBirth.onchange = function () {
-        if (!this.value){
+        if (!this.value) {
             this.value = strawBornDate.format(dateFormat);
         }
         tag_strawBirth.innerText = calculate(moment(input_dateNow.value), moment(this.value));
@@ -187,23 +186,25 @@
 
 
     function calculate(nowDate, targetDate) {
-        if (parseInt(nowDate.format("D")) >= parseInt(targetDate.format("D"))) {
-            diffDayNum = parseInt(nowDate.format("D")) - parseInt(targetDate.format("D"));
-        } else {
-            diffDayNum = parseInt(nowDate.format("D")) - parseInt(targetDate.format("D")) + nowDate.add(-1,
+        let diffDayNum = 0, diffMonthNum = 0, diffYearNum = 0;
+        let tempNowDate = moment(nowDate.format(dateFormat)); // prevent nowDate value change by reference
+
+        if (parseInt(tempNowDate.format("D")) >= parseInt(targetDate.format("D"))) {
+            diffDayNum = parseInt(tempNowDate.format("D")) - parseInt(targetDate.format("D"));
+        } else {            
+            diffDayNum = parseInt(tempNowDate.format("D")) - parseInt(targetDate.format("D")) + tempNowDate.add(-1,
                 "month").daysInMonth();
         }
-        if (nowDate.month() >= targetDate.month()) {
-            diffMonthNum = nowDate.month() - targetDate.month();
+        if (tempNowDate.month() >= targetDate.month()) {
+            diffMonthNum = tempNowDate.month() - targetDate.month();
         } else {
-            diffMonthNum = nowDate.month() - targetDate.month() + 12;
+            diffMonthNum = tempNowDate.month() - targetDate.month() + 12;
         }
-        if (nowDate.dayOfYear() >= targetDate.dayOfYear()) {
-            diffYearNum = nowDate.year() - targetDate.year();
+        if (tempNowDate.dayOfYear() >= targetDate.dayOfYear()) {
+            diffYearNum = tempNowDate.year() - targetDate.year();
         } else {
-            diffYearNum = nowDate.year() - targetDate.year() - 1;
+            diffYearNum = tempNowDate.year() - targetDate.year() - 1;
         }
-        //tag.innerText = "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
         return "#" + String(diffYearNum) + "y" + String(diffMonthNum) + "m" + String(diffDayNum) + "d";
     }
 
@@ -225,5 +226,4 @@
         }, 2000);
     }
 </script>
-
 </html>
